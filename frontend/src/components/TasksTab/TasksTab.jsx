@@ -1,10 +1,22 @@
 import { Task } from "../";
 import React, { useCallback, useEffect, useMemo,useState} from "react";
 import { FormContext } from "../../context/TaskContext";
+import { ProjectsContext } from '../../context/ProjectsContext';
+import { ActiveProjectsContext } from '../../context/ActiveProjectContext';
 // keeps the collection of tasks and renders the tasks tab will be used as to do and done
 export default function TasksTab(props) {
-  
+  const {projects,setProjects}=React.useContext(ProjectsContext);
   const { tasks, setTasks } = React.useContext(FormContext);
+  const {projectId,setProjectId,handleProjectId,isLoading,setIsLoading}=React.useContext(ActiveProjectsContext);
+  // useEffect(()=>{if(projectId!==null){
+  //   console.log("hello")
+  //   setTasks(projects[projectId].task);
+  // }},[tasks])
+
+  useEffect(()=>{
+    handleProjectId();
+  },[])
+
   const handleStatus=useCallback((e,key)=>{
     const temp=[...tasks];
     temp[key].isDone=e.target.checked;
@@ -17,8 +29,10 @@ export default function TasksTab(props) {
     setTasks((prev)=>(prev.filter((task,index)=>index!==k)))
   }
 
+
   React.useEffect(()=>{
     console.log(tasks);
+    // projectId && setTasks(projects[projectId].task);
   },[tasks]);
 
   return (

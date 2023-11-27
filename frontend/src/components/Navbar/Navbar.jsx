@@ -2,11 +2,14 @@
 import React ,{ useState } from 'react';
 import addImage from '../../assets/image-gallery.png';
 import { FormContext } from '../../context/TaskContext';
+import { ProjectsContext } from '../../context/ProjectsContext';
+import { ActiveProjectsContext } from '../../context/ActiveProjectContext';
 export default function Navbar(prop) {
   const {tasks,setTasks} = React.useContext(FormContext)
-  const [projects,setProjects]=useState([]);
+  const {projects,setProjects}=React.useContext(ProjectsContext);
   const[opt,setOpt]=useState("");
   const [title,setTitle]=useState("");
+  const {projectId,setProjectId,setLoading}=React.useContext(ActiveProjectsContext);
   const handleAction=(e)=>{
     e.preventDefault();
     if(opt===""||title==="")
@@ -19,18 +22,25 @@ export default function Navbar(prop) {
     }
     else if(opt==="task")
     {
-        setTasks((prev)=>([...prev,{title:title,isDone:false}]))
-        setTitle("");
+      setLoading(true);
+      if(projectId===null)
+      setTasks((prev)=>([...prev,{title:title,isDone:false}]));
+      else
+      {
+        let temp=projects;
+        temp[projectId].task.push({title:title,isDone:false});
+        setProjects(temp);
+      }
+      setTitle("");
+      setLoading(false);  
     }
     else if(opt==="project")
     {
-      projects.push(title);
+      setProjects((prev)=>[...prev,{project:title,task:[]}]);
       setTitle("");
     }
-
-    
-
   }
+  console.log(projectId);
   return(
     <div className="w-1/5 text-white mx-4">
       <form action="" onSubmit={handleAction}>
@@ -46,9 +56,9 @@ export default function Navbar(prop) {
       <img onClick={handleAction}src={addImage} alt="add-icon" />
       </div>
       </form>
-      {projects.map((project)=>{return(
-        <div className="text-center my-9 bg-slate-400 rounded-xl cursor-pointer">
-          <h2 className='text-3xl'>{project}</h2>
+      {projects.map((project,index)=>{return(
+        <div onClick={()=>setProjectId(index)} className={`${index===projectId?"active":""} text-center my-9 bg-slate-400 rounded-xl cursor-pointer`}>
+          <h2 className='text-3xl'>{project.project}</h2>
         </div>
       )})}
     </div>
