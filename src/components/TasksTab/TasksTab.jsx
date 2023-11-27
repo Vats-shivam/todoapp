@@ -8,14 +8,8 @@ export default function TasksTab(props) {
   const {projects,setProjects}=React.useContext(ProjectsContext);
   const { tasks, setTasks } = React.useContext(FormContext);
   const {projectId,setProjectId,handleProjectId,isLoading,setIsLoading}=React.useContext(ActiveProjectsContext);
-  // useEffect(()=>{if(projectId!==null){
-  //   console.log("hello")
-  //   setTasks(projects[projectId].task);
-  // }},[tasks])
+  const [render,setRender]=useState(false);
 
-  useEffect(()=>{
-    handleProjectId();
-  },[])
 
   const handleStatus=useCallback((e,key)=>{
     const temp=[...tasks];
@@ -28,12 +22,6 @@ export default function TasksTab(props) {
   const handleDelete=(k)=>{
     setTasks((prev)=>(prev.filter((task,index)=>index!==k)))
   }
-
-
-  React.useEffect(()=>{
-    console.log(tasks);
-    // projectId && setTasks(projects[projectId].task);
-  },[tasks]);
 
   return (
     <div className="bg-white rounded-3xl w-1/2 text-black overflow-scroll TasksTab">

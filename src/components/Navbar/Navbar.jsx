@@ -9,7 +9,8 @@ export default function Navbar() {
   const {projects,setProjects}=React.useContext(ProjectsContext);
   const[opt,setOpt]=useState("");
   const [title,setTitle]=useState("");
-  const {projectId,setProjectId,setLoading}=React.useContext(ActiveProjectsContext);
+  const {projectId,setProjectId,setIsLoading}=React.useContext(ActiveProjectsContext);
+  
   const handleAction=(e)=>{
     e.preventDefault();
     if(opt===""||title==="")
@@ -22,17 +23,19 @@ export default function Navbar() {
     }
     else if(opt==="task")
     {
-      setLoading(true);
+      setIsLoading(true);
       if(projectId===null)
       setTasks((prev)=>([...prev,{title:title,isDone:false}]));
       else
       {
-        let temp=projects;
+        let temp=[...projects];
         temp[projectId].task.push({title:title,isDone:false});
         setProjects(temp);
+        setTasks(temp[projectId].task);
+        console.log(tasks);
       }
       setTitle("");
-      setLoading(false);  
+      setIsLoading(false);  
     }
     else if(opt==="project")
     {
@@ -40,6 +43,13 @@ export default function Navbar() {
       setTitle("");
     }
   }
+  const handleActiveProject=(index)=>{
+    setProjectId(index)
+    setTasks(projects[index].task);
+    console.log(projects[index]);
+  }
+
+  
   console.log(projectId);
   return(
     <div className="w-1/5 text-white mx-4">
@@ -57,7 +67,7 @@ export default function Navbar() {
       </div>
       </form>
       {projects.map((project,index)=>{return(
-        <div onClick={()=>setProjectId(index)} className={`${index===projectId?"active":""} text-center my-9 bg-slate-400 rounded-xl cursor-pointer`}>
+        <div onClick={()=>handleActiveProject(index)} className={`${index===projectId?"active":""} text-center my-9 bg-slate-400 rounded-xl cursor-pointer`}>
           <h2 className='text-3xl'>{project.project}</h2>
         </div>
       )})}
