@@ -4,8 +4,8 @@ import addImage from '../../assets/image-gallery.png';
 import { FormContext } from '../../context/TaskContext';
 import { ProjectsContext } from '../../context/ProjectsContext';
 import { ActiveProjectsContext } from '../../context/ActiveProjectContext';
-export default function Navbar(prop) {
-  const {tasks,setTasks} = React.useContext(FormContext)
+export default function Navbar() {
+  const {tasks,setTasks} = React.useContext(FormContext);
   const {projects,setProjects}=React.useContext(ProjectsContext);
   const[opt,setOpt]=useState("");
   const [title,setTitle]=useState("");
