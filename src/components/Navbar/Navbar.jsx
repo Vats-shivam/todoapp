@@ -47,15 +47,14 @@ export default function Navbar() {
   const handleActiveProject=(index)=>{
     setProjectId(index)
     setTasks(projects[index].task);
-    console.log(projects[index]);
   }
 
-  const handleDeleteProject=(index)=>{
+  const handleDeleteProject=(e,index)=>{
+    e.stopPropagation();
     const updatedProject=[...projects];
     updatedProject.splice(index,1);
     setProjects(updatedProject);
     setProjectId(null);
-    // console.log(null);
   }
 
   
@@ -80,7 +79,7 @@ export default function Navbar() {
         <div className={`${index===projectId?"active":""} flex items-center justify-center py-2 h-8 text-center my-9 bg-slate-400 rounded-xl cursor-pointer`}>
           <div className="flex justify-between w-full items-center" onClick={()=>handleActiveProject(index)}>
           <h2 className='text-3xl w-4/5'>{project.project}</h2>
-          <img src={xmark} onClick={()=>handleDeleteProject(index)} className="w-4 h-4 mx-2" alt="delete-btn" />
+          <img src={xmark} onClick={(e)=>handleDeleteProject(e,index)} className="w-4 h-4 mx-2" alt="delete-btn" />
           </div>
         </div>
         </>
