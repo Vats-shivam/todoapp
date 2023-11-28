@@ -1,6 +1,7 @@
 //category fields like monday, tuesday, wednesday, etc.
 import React ,{ useState } from 'react';
 import addImage from '../../assets/image-gallery.png';
+import xmark from "../../assets/x-mark.png";
 import { FormContext } from '../../context/TaskContext';
 import { ProjectsContext } from '../../context/ProjectsContext';
 import { ActiveProjectsContext } from '../../context/ActiveProjectContext';
@@ -49,6 +50,14 @@ export default function Navbar() {
     console.log(projects[index]);
   }
 
+  const handleDeleteProject=(index)=>{
+    const updatedProject=[...projects];
+    updatedProject.splice(index,1);
+    setProjects(updatedProject);
+    setProjectId(null);
+    // console.log(null);
+  }
+
   
   console.log(projectId);
   return(
@@ -67,9 +76,14 @@ export default function Navbar() {
       </div>
       </form>
       {projects.map((project,index)=>{return(
-        <div onClick={()=>handleActiveProject(index)} className={`${index===projectId?"active":""} text-center my-9 bg-slate-400 rounded-xl cursor-pointer`}>
-          <h2 className='text-3xl'>{project.project}</h2>
+        <>
+        <div className={`${index===projectId?"active":""} flex items-center justify-center py-2 h-8 text-center my-9 bg-slate-400 rounded-xl cursor-pointer`}>
+          <div className="flex justify-between w-full items-center" onClick={()=>handleActiveProject(index)}>
+          <h2 className='text-3xl w-4/5'>{project.project}</h2>
+          <img src={xmark} onClick={()=>handleDeleteProject(index)} className="w-4 h-4 mx-2" alt="delete-btn" />
+          </div>
         </div>
+        </>
       )})}
     </div>
   );

@@ -20,7 +20,12 @@ export default function TasksTab(props) {
 
 
   const handleDelete=(k)=>{
-    setTasks((prev)=>(prev.filter((task,index)=>index!==k)))
+    projectId!==null?setProjects(()=>{
+      const updateProj=[...projects]
+      updateProj[projectId].task.splice(k,1);
+      console.log(updateProj);
+      return updateProj;
+    }):setTasks((prev)=>(prev.filter((task,index)=>index!==k)))
   }
 
   return (
